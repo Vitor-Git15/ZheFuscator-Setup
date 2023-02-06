@@ -17,9 +17,20 @@
             <goals>
               <goal>antlr4</goal>
             </goals>
+            <configuration>
+                <outputDirectory>src/main/resources/antlr_classes</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.4.1</version>
+            <configuration>
+                <skip>true</skip>
+            </configuration>
+        </plugin>
       <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -42,7 +53,6 @@
                     </execution>
                 </executions>
             </plugin>
-
     </plugins>
   </build>
     <dependencies>
@@ -50,6 +60,11 @@
             <groupId>org.antlr</groupId>
             <artifactId>antlr4</artifactId>
             <version>4.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>ParSy</groupId>
+            <artifactId>ParSy</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <properties>

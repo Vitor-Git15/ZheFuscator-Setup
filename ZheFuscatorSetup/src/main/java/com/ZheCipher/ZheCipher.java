@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ZheCipher;
 
 import java.security.Key;
@@ -34,19 +30,14 @@ public class ZheCipher{
   private String key;
 
   /** 
-   * This is builder of ZheCipher class without argument. The key
-   * used is taken from a standard file.
-   * @param Nothing 
+   * This is builder of ZheCipher class without argument.The key
+ used is taken from a standard file. 
    */
 
   public ZheCipher() {
-    try { 
-      FileReader arq = new FileReader("Zhefuscator/Texts/key.txt");
-      BufferedReader lerArq = new BufferedReader(arq);
-      this.key = lerArq.readLine(); // 128 bit key
-
-      arq.close();
-
+    try (FileReader arq = new FileReader("Zhefuscator/Texts/key.txt")) {
+        BufferedReader lerArq = new BufferedReader(arq);
+        this.key = lerArq.readLine(); // 128 bit key
     } catch (IOException e) {
       System.err.printf("Error opening file for reading: %s.\n",
           e.getMessage());
@@ -95,7 +86,7 @@ public class ZheCipher{
   
   /** 
    * This method is used to decode a String from Base64
-   * enconding.
+   * encoding.
    * @param text This is the String to be decoded
    * @return String This returns the decoded String
    */
@@ -105,7 +96,7 @@ public class ZheCipher{
   
   /** 
    * This method is used to encode a String to Base64
-   * enconding.
+   * encoding.
    * @param inputBytes This is the String to be encoded
    * @return String This returns the encoded String
    */

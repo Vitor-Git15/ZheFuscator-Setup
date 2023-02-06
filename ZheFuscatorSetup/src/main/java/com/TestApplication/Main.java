@@ -1,28 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.TestApplication;
 
 import java.io.IOException;
 
 /**
- *
- * @author vitor
- */
+* <h1>Main!</h1>
+* The Main program implements an application that
+* encrypts or decrypts a text based on the AES method
+*
+* @author  Vitor Emanuel
+* @version 1.0
+* @since   2022-11-01
+*/
 public class Main { 
   
   private static final boolean ENCRYPT_MODE = true;
   private static final boolean DECRYPT_MODE = false;
 
     /**
-     *
+     * The main function of the encryption/decryption based on the used grammar
      * @param args
-     * @throws IOException
+     * @throws java.io.IOException
      */
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, InterruptedException, Exception {
       
-    Args arg = new Args();
+    ArgsManipulator arg = new ArgsManipulator();
     arg.parseArgs(args);
     
     if(arg.getOption() == ENCRYPT_MODE){

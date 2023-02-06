@@ -8,7 +8,7 @@ all: encrypt
 
 encrypt:
 	@$(JAVA) -jar $(JAR_DEPENDECIES) -I:$(TEXTS_FOLDER)original.txt -O:$(TEXTS_FOLDER)encrypted.txt -e -K:defaultkey123456
-	@echo "\n\n** original text **\n"
+	@echo "** original text **\n"
 	@cat $(TEXTS_FOLDER)original.txt
 	@echo "\n\n** encrypted text **\n"
 	@cat $(TEXTS_FOLDER)encrypted.txt

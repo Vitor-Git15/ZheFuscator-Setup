@@ -37,7 +37,7 @@ public class RegexManipulator{
    * of a regular expression
    * @param s This is the string to be analyzed
    * @param regex This is the regular expression
-   * @return boolean This is the result
+   * @return Boolean This is the result
    */
   public boolean checkString(String s, String regex) {
     return s.matches(regex);
