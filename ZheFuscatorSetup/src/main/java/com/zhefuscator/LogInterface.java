@@ -1,14 +1,24 @@
 package com.zhefuscator;
 
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import javax.tools.*;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.tool.Grammar;
+import org.antlr.v4.tool.ast.GrammarRootAST;
 
 import zhe.ParSy.Parser.ZheParser;
 /**
@@ -32,6 +42,8 @@ public class LogInterface {
     private ZheGrammarParser parser;
 
     public LogInterface() {
+        lexer = null;
+        parser = null;
         this.grammarPath = "src/main/antlr4/com/zhefuscator/ZheGrammar.g4";
         zheParser = new ZheParser(" ", this.grammarPath);
 
@@ -47,7 +59,8 @@ public class LogInterface {
         String grammarName = "ZheGrammar";
         String sourcePath = "src/main/resources/antlr_classes/com/zhefuscator/";
         String sourcePath_ = "com.zhefuscator.";
-        String[] args = {"-no-visitor", "-no-listener", "-o", sourcePath, "-lib",  grammarPath};
+        
+        String[] args = {"-no-visitor", "-no-listener", "-o", sourcePath};
         Tool tool = new Tool(args);
 
         if (args.length == 0) {
@@ -56,27 +69,36 @@ public class LogInterface {
         }
 
         try {
-            tool.processGrammarsOnCommandLine();
+            String updatedGrammar = new String(Files.readAllBytes(Paths.get(grammarPath)));
+            System.out.println(updatedGrammar);
+            GrammarRootAST ast = tool.parseGrammarFromString(updatedGrammar);
+            Grammar g = tool.createGrammar(ast);
+            tool.process(g, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-
         int result = compiler.run(null, System.out, System.err, "-sourcepath", sourcePath, sourcePath + grammarName + "Lexer.java", sourcePath + grammarName + "Parser.java");
+        
         if (result == 0) {
             try {
                 CharStream cs = CharStreams.fromString(text);
                 
                 Class<?> lexerClass = Class.forName(sourcePath_ + grammarName + "Lexer");
+                ClassLoader lexerClassLoader = lexerClass.getClassLoader();
+                lexerClassLoader.loadClass(sourcePath_ + grammarName + "Lexer");
                 Constructor lexerCTor = lexerClass.getConstructor(CharStream.class);
                 lexer = (ZheGrammarLexer) lexerCTor.newInstance(cs);
-
+                lexer.removeErrorListeners();
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 
                 Class<?> parserClass = Class.forName(sourcePath_ + grammarName + "Parser");
+                ClassLoader parserClassLoader = parserClass.getClassLoader();
+                parserClassLoader.loadClass(sourcePath_ + grammarName + "Parser");
                 Constructor parserCTor = parserClass.getConstructor(TokenStream.class);
                 parser = (ZheGrammarParser) parserCTor.newInstance(tokens);
+                
                 Method entryPointMethod = parserClass.getMethod("r0");
                 entryPointMethod.invoke(parser);
             } catch (Exception e) {
