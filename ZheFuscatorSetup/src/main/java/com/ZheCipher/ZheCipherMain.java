@@ -98,10 +98,11 @@ public class ZheCipherMain {
      * processing operations before encryption.
      */
     private void encryptMode() throws IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException, InterruptedException, Exception {
-        li = new LogInterface();
+        
         int i = 0;
         while(i < 3)
         {
+            li = new LogInterface();
             String line;
             line = tfl.read();
             while (line != null) {
